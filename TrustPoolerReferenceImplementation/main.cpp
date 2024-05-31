@@ -12,6 +12,7 @@
 //  https://trustpooler.xyz
 //
 // Tested on GCC 14.1 and Clang 18.1.0
+//
 
 #include <iostream>
 #include <string>
@@ -19,6 +20,7 @@
 #include <map>
 #include <set>
 #include <cassert>
+#include "third_party/cxx-prettyprint/prettyprint.hpp"
 
 // Trust Pooler namespace
 namespace tp
@@ -43,7 +45,7 @@ namespace tp
         return os;
     }
 
-    // Base class for a transaction
+    // Base class for a transaction - no constructor for this exercise
     struct DefaultTX
     {
         using TxId = int;           // Transaction id
@@ -61,7 +63,7 @@ namespace tp
         }
     };
 
-    // Base class for a Pool Event either Mutex or Long Short
+    // Base class for a Pool Event either Mutex or Long Short - no constructor for this exercise
     struct PoolEvent
     {
         double pool_share{};        // What share of the pool do I have >
@@ -87,9 +89,9 @@ namespace tp
         Tx              tx;         // Tx associated with this event
         
         MutexEvent()=default;
-        MutexEvent(const std::string& e ) : event(e) {};
+        MutexEvent( const std::string& e ) : event(e) {};
         
-        void print(std::ostream& os ) const
+        void print( std::ostream& os ) const
         {
             os << "Event : " << event << " " << tx;
             PoolEvent::print(os);
@@ -147,7 +149,7 @@ namespace tp
         LongShortEvent()=default;
         LongShortEvent( Side s, Price p ) : side{s}, price{p} {};
         
-        void print(std::ostream& os ) const
+        void print( std::ostream& os ) const
         {
             os << ( side == Side::Long ? "Long " : "Short ") << " @ price " << price << " " << tx;
             PoolEvent::print(os);
@@ -265,7 +267,6 @@ namespace tp
             }
         }
         
-        // Everything else is const
         auto ProFormaReturn( const Event& event, Amount amount, Level level ) const
         {
             // Copy the pool
@@ -467,7 +468,6 @@ namespace tp
             std::cout << "Fees : " << Fees() << std::endl;
             std::cout << "Pool value : " << TotalPool() << std::endl;
             std::cout << "Total payout : " << total_payout << std::endl;
-            std::cout << "Distance product - should be 1 : " << distance_product << std::endl;
             
             return winning_risks;
         }
